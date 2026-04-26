@@ -84,13 +84,12 @@ def print_report(results, n = None):
 
 def main():
 
-    reviews = sys.argv[2]
-
-    if len(sys.argv) > 3:
-        input = sys.argv[3]
-
+    with open(sys.argv[2]) as f:
+        reviews = f.readlines()
     sentiment_weights = read_file(sys.argv[1])
     results = analyze_sentiment(reviews, sentiment_weights)
+    if len(sys.argv) > 3:
+        input = sys.argv[3]
 
     if len(sys.argv) < 4:
         print_report(results, n = None)
