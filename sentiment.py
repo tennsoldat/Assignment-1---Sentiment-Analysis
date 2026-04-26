@@ -9,7 +9,7 @@ Original file is located at
 
 import sys
 
-def clen_text(text)
+def clean_text(text):
     token = text.split()
     clean_text = []
     word = ""
@@ -25,7 +25,7 @@ def clen_text(text)
     return clean_text
 
 
-def read_file(filename)
+def read_file(filename):
 
     with open(filename, "r", encoding="utf-8") as f:
         sentiment_weights = {}
@@ -45,16 +45,22 @@ def calculate_score(text, sentiment_weights):
 
 
 def analyze_sentiment(document, sentiment_weights):
-    resluts = []
+    results = []
 
-    if score > 0:
-        sentiments = Positive
-    elif score < 0:
-        sentiments = Negative
-    else
-        sentiments = Neutral
+    for text in document:
+        tokens = clean_text(text)
+        score = calculate_score(tokens, sentiment_weights)
 
-    return results, score, sentiments
+        if score > 0:
+            sentiments = "Positive"
+        elif score < 0:
+            sentiments = "Negative"
+        else:
+            sentiments = "Neutral"
+
+        results.append({ "text": text, "score": score, "sentiments": sentiments })
+
+    return results
 
 
 
@@ -73,13 +79,47 @@ def print_report(results, n = None):
         for item in results[:n]:
             print(item["text"].ljust(),"|",item["score"], "|", item["sentiments"])
 
+
+
 def main():
 
+    reviews = sys.argv[2]
 
+    if len(sys.argv) > 3:
+        input = sys.argv[3]
 
+    sentiment_weights = read_file(sys.argv[1])
+    results = analyze_sentiment(reviews, sentiment_weights)
 
+    if len(sys.argv) < 4
+        print_report(results, n = None)
 
+    elif input.isdigit():
+         print_report(results, int(input))
 
+    elif input == "POS":
+        pos = []
+        for p in results:
+            if p["sentiments"] == "Positive":
+                pos.append(p)
+            print_report(pos)
+
+    elif input == "NEG":
+        neg = []
+        for p in results:
+            if p["sentiments"] == "Negative":
+                neg.append(p)
+        print_report(results, neg)
+
+    elif input == "NEUT":
+        neu = []
+        for p in results:
+            if p["sentiments"] == "Neutral":
+                neu.append(p)
+        print_report(neu)
+
+    else:
+         print("Not supported")
 
 
   if __name__=="__main__":
