@@ -29,9 +29,10 @@ def read_file(filename):
 
     with open(filename, "r", encoding="utf-8") as f:
         sentiment_weights = {}
-    next(f)
-    for line in f:
-        words, score = line.strip().split()
+        next(f)
+        for line in f:
+            word, score = line.strip().split(",")
+            sentiment_weights[word] = int(score)
         return sentiment_weights
 
 
@@ -74,10 +75,10 @@ def print_report(results, n = None):
 
     if n == None:
         for item in results:
-            print(item["text"].ljust(),"|",item["score"], "|", item["sentiments"])
+            print(item["text"].ljust(length),"|",item["score"], "|", item["sentiments"])
     else:
         for item in results[:n]:
-            print(item["text"].ljust(),"|",item["score"], "|", item["sentiments"])
+            print(item["text"].ljust(length),"|",item["score"], "|", item["sentiments"])
 
 
 
@@ -91,7 +92,7 @@ def main():
     sentiment_weights = read_file(sys.argv[1])
     results = analyze_sentiment(reviews, sentiment_weights)
 
-    if len(sys.argv) < 4
+    if len(sys.argv) < 4:
         print_report(results, n = None)
 
     elif input.isdigit():
@@ -109,7 +110,7 @@ def main():
         for p in results:
             if p["sentiments"] == "Negative":
                 neg.append(p)
-        print_report(results, neg)
+        print_report(neg)
 
     elif input == "NEUT":
         neu = []
@@ -122,6 +123,6 @@ def main():
          print("Not supported")
 
 
-  if __name__=="__main__":
+if __name__=="__main__":
     main()
 
